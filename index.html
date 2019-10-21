@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="it" ng-app="myApp">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="chapter1/css/bootstrap.min.css">
+    <title></title>
+    <script type="text/javascript" src="chapter1/js/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/hmac.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/sha1.js"></script>
+</head>
+<body class="colorgradient">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 center">
+                <div ng-controller="userController">
+                    <!-- <span ng-If="getFromStorage()">{{getFromStorage()}}</span> -->
+                    <span>{{displayThis}}</span>
+                    <p class="myfont" style="color: white">Aggiungi una nuova password!</p>
+                    <input class="myfont" style="margin: 10px" type="text" placeholder=" Sito" ng-model="sito" /><br>
+                    <input class="myfont" style="margin: 10px" type="text" placeholder=" Mail" ng-model="mail" /><br>
+                    <input class="myfont" style="margin: 10px" type="text" placeholder=" Password"
+                        ng-model="password" /><br>
+                    <button ng-show="sito && mail && password" class="btn btn-success myfont mb-5" style="margin: 1rem;"
+                        ng-click="aggiungiPassword()">Aggiungi</button>
+
+                    <div class="card myfont mb-5 mt-5" style="background-color: #f2f2f2;"
+                        ng-repeat=" value in elencoPassword">
+                        
+                        <div style="font-weight: bold;" ng-model="sito">{{value.sito}}</div>
+                        <div ng-model="mail">{{value.mail}}</div>
+                        <div ng-model="password">{{value.password}}</div>
+                        <div>
+                            <button class="btn btn-secondary" style="margin: 1rem; font-size: 2.5rem"
+                                ng-click="rimuoviPassword(value)">Rimuovi</button>
+                        </div>
+                    </div>
+                </div><!--  chiusura controller -->
+            </div><!--  chiusura colonna -->
+        </div><!--  chiusura row -->
+    </div> <!--  chiusura container -->
+    <style type="text/css">
+        .myfont {
+            font-size: 3rem;
+        }
+        
+        .center {
+            text-align: center;
+        }
+
+        .colorgradient {
+            background: linear-gradient(to bottom, #003366 0%, #33cccc 100%);
+            background-attachment: fixed;
+        }
+    </style>
+</body>
+</html>
+<script type="text/javascript">
+    angular.module("myApp", [])
+        .controller("userController",
+            function ($scope) {
+                /*
+                $scope.elencoPassword = [
+                    {sito: "Gmail", mail: "nome.cognome@gmail.it", password: "password"}
+                ];*/
+                console.log(localStorage.getItem("Memory"));
+                
+                var db = JSON.parse(localStorage.getItem("Memory")) || [];
+                $scope.elencoPassword = {...db};
+                console.log($scope.elencoPassword);
+                console.log(db);
+
+                $scope.aggiungiPassword = function () {
+                   //$scope.
+                   var sito = {sito: $scope.sito, mail: $scope.mail, password: $scope.password};
+                   console.log(sito); 
+                   db.push(sito);
+                   localStorage.setItem("Memory", JSON.stringify(db));
+                   //console.log(JSON.parse(localStorage.getItem({sito: $scope.sito, mail: $scope.mail, password: $scope.password})))
+                   console.log(JSON.stringify(db));
+                    $scope.elencoPassword={...db};
+                }
+                $scope.rimuoviPassword = function (sito) {
+                    
+                   const idx = db.indexOf(sito);
+                   db.splice(idx,1);
+                   localStorage.setItem("Memory", JSON.stringify(db));
+                   $scope.elencoPassword={...db};
+                //   localStorage.setItem("Memory", JSON.stringify($scope.elencoPassword));
+               
+                }
+            });
+</script>
+<script>
+    
+</script>
